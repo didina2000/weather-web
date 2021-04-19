@@ -1,0 +1,16 @@
+{
+  "name": "weather-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "author": "David Filat",
+  "license": "ISC",
+  "dependencies": {
+    "luxon": "^1.26.0",
+    "parcel-bundler": "^1.12.5"
+  }
+}
