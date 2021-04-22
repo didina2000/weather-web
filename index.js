@@ -2,6 +2,32 @@ import { OPEN_WEATHER_MAP_API_KEY } from "./credentials.js";
 import { DateTime } from "luxon";
 import { Table } from "./Table.js";
 
+async function getData(url) {
+  try {
+    const response = await axios.get(url);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    const errorMessages = {
+      401: "API key este incorect. Vă rugăm verificați fișierul credential.js. ",
+      404:
+        "Denumirea orașului nu este validă.  " +
+        "Vă rugăm verificați dacă ați introdus numele orașului corect! ",
+      429: "Ați depășit limita de cereri către OpenWeatherMAp API. ",
+      500: "Ne pare rău, a apărut o eroare internă a serverului. ",
+      EAI_AGAIN:
+        "Nu există o conexiune cu Internetul." +
+        "Verificați dacă sunteți conectați la o sursă de internet. ",
+      get ENOTFOUND() {
+        return this.EAI_AGAIN;
+      },
+    };
+    const errorCode = error.code || Number(error.response.data.cod);
+    console.log(chalk.red.bgYellow.bold(errorMessages[errorCode]));
+    process.exit();
+  }
+}
+
 const inputEl = document.getElementById("cityName");
 inputEl.onchange = printCurrentWeather;
 
