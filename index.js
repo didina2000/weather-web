@@ -1,8 +1,8 @@
-import { OPEN_WEATHER_MAP_API_KEY } from './credentials.js';
-import { DateTime } from 'luxon';
-import { Table } from './Table.js';
+import { OPEN_WEATHER_MAP_API_KEY } from "./credentials.js";
+import { DateTime } from "luxon";
+import { Table } from "./Table.js";
 
-const inputEl = document.getElementById('cityName');
+const inputEl = document.getElementById("cityName");
 inputEl.onchange = printCurrentWeather;
 
 function printCurrentWeather(event) {
@@ -15,7 +15,6 @@ function printCurrentWeather(event) {
       printWeatherFor7Days(data.coord);
     });
 }
-
 function printWeatherFor7Days({ lat, lon }) {
   const OPEN_WEATHER_MAP_API =
     `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}` +
@@ -29,25 +28,30 @@ function printWeatherFor7Days({ lat, lon }) {
 
 function generateForecastTable(data) {
   const table = new Table([
-    'Data',
-    'Temp. Maximă',
-    'Temp. Minimă',
-    'Viteza vântului',
+    "Data",
+    "Temp. Maximă",
+    "Temp. Minimă",
+    "Viteza vântului",
   ]);
   data.daily.forEach((day) => {
     const date = DateTime.fromSeconds(day.dt)
-      .setLocale('ro')
+      .setLocale("ro")
       .toLocaleString(DateTime.DATE_MED);
 
     const tempMax = day.temp.max;
     const tempMin = day.temp.min;
     const windSpeed = day.wind_speed;
 
-    const row = [date, tempMax, tempMin, windSpeed];
+    const row = [
+      date,
+      `${Math.round(day.temp.max)}°C`,
+      `${Math.round(day.temp.min)}°C`,
+      `${Math.round(day.wind_speed)}m/s`,
+    ];
 
     table.push(row);
   });
   console.log(table);
-  const tableContainer = document.getElementById('tableContainer');
+  const tableContainer = document.getElementById("tableContainer");
   tableContainer.innerHTML = table.toHTML();
 }
